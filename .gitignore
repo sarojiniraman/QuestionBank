@@ -1,3 +1,4 @@
 public/libs
 .idea
 config/npm-debug.log
+modules/core/client/index.html
