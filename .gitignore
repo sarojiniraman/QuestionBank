@@ -1,4 +1,7 @@
-public/libs
+public/libs/
 .idea
 config/npm-debug.log
 modules/core/client/index.html
+node_modules
+coverage
+public/lib

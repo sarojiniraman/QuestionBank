@@ -3,9 +3,14 @@
 module.exports = {
     client: {
         lib: {
-            css: [],
+            css: [
+                'public/lib/bootstrap/dist/css/bootstrap.css'
+            ],
             js: [
-                'public/lib/angular/angular.js'
+                'public/lib/angular/angular.js',
+                'public/lib/jquery/dist/jquery.js',
+                'public/lib/bootstrap/dist/js/bootstrap.js',
+                'public/lib/angular-ui-router/release/angular-ui-router.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },
@@ -20,7 +25,7 @@ module.exports = {
         ],
         views: ['modules/*/client/views/**/*.html'],
         templates: ['build/templates.js'],
-        destination: 'modules/core/client',
+        destination: 'modules',
         index: 'modules/core/client/views/index.client.tpl.html'
     },
     server: {
