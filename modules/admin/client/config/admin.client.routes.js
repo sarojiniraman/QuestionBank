@@ -2,6 +2,9 @@
 (function(){
 	angular
 		.module('admin')
+		.config(function(AdminServiceProvider){
+			AdminServiceProvider.setDataSourceToggle(false);
+		})
 		.config(function($stateProvider){
 			$stateProvider
 			.state({

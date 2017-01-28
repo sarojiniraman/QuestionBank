@@ -3,22 +3,33 @@
 (function(){
 	angular
 		.module('admin')
-		.provider('AdminService', function($q){
-			var dataSourceToggle = false;
+		.provider('AdminService', function(){ // Dependency injection for Promise
+			
+         var dataSourceToggle = false;
 			this.setDataSourceToggle = function(value){
 				dataSourceToggle = value;
 			};
 			var _questions = [],
-				_addQuestion = function(question){
-					if(!question) throw new Error ({ code : 'QBS-001' , Error : 'Question is not passed' });
-					if(!dataSourceToggle){
-						_questions.push(question);
-						return _questions;
-					}else{
-						// TODO : have to write service call
-						console.log('service call');
-					}
-				};
+				_addQuestion = function(q, timeout){
+               return function(question){
+                  var defer = q.defer();
+
+                  // Biz logic
+                  timeout(function(){ // Callback executes on separate thread. Async processor
+                     if(!question) 
+                        defer.reject( { code : 'QBS-001' , Error : 'Question is not passed' } ); // invokes failure callback
+                     if(!dataSourceToggle){
+                        _questions.push(question);
+                         defer.resolve(_questions); // invokes success callback
+                     }else{
+                        // TODO : have to write service call
+                        console.log('service call');
+                     }
+                  }, 5000); // Hold current processing thread for 2 secs
+                  
+                  return defer.promise; // Return promise to caller
+               };      
+			};
 			var _getQuestions = function(){
 				if(!dataSourceToggle){
 					return _questions.slice();
@@ -72,9 +83,9 @@
    				}
    			};
 
-			this.$get = function(){
+			this.$get = function($q,$timeout){
 				return{
-					addQuestion : _addQuestion,
+					addQuestion : _addQuestion($q,$timeout),
 					getQuestions : _getQuestions,
 					removeByTitle : _removeByTitle,
 					searchByTitle : _searchByTitle,
