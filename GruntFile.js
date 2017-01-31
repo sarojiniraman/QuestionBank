@@ -171,6 +171,10 @@ module.exports = function(grunt) {
           build:{
               dir: defaultAssets.client.destination,
               src: _.union(defaultAssets.client.lib.js, defaultAssets.client.js, defaultAssets.client.lib.css, defaultAssets.client.css)
+          },
+          mock:{
+            dir: defaultAssets.client.destination,
+              src: _.union(defaultAssets.client.lib.js,defaultAssets.client.lib.tests, defaultAssets.client.js, defaultAssets.client.lib.css, defaultAssets.client.css)  
           }
         },
         'node-inspector': {
@@ -328,6 +332,8 @@ module.exports = function(grunt) {
 
     // Run the project in development mode in live
     grunt.registerTask('live', ['index:build', 'concurrent:live']);
+
+    grunt.registerTask('mock', ['index:mock', 'concurrent:live']);
 
     // Run the project in debug mode
     grunt.registerTask('debug', ['env:dev', 'lint', 'mkdir:upload', 'copy:localConfig', 'concurrent:debug']);
