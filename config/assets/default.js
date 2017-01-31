@@ -23,6 +23,7 @@ module.exports = {
             'modules/!(tests)/client/*.js',
             'modules/!(tests)/client/**/*.js'
         ],
+        mocks: ['modules/*/tests/client/backend.mock.service.js'],
         views: ['modules/*/client/views/**/*.html'],
         templates: ['build/templates.js'],
         destination: 'modules',

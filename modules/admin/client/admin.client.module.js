@@ -1,3 +1,4 @@
 'use strict';
 
-ApplicationConfiguration.registerModule('admin',['ui.router']);
+var dependencies = ApplicationConfiguration.loadMockDependencies(['ui.router']);
+ApplicationConfiguration.registerModule('admin',dependencies);

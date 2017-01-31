@@ -10,33 +10,49 @@
 				dataSourceToggle = value;
 			};
 			var _questions = [],
-				_addQuestion = function(q, timeout){
+				_addQuestion = function(q, timeout, http){
                return function(question){
                   var defer = q.defer();
 
                   // Biz logic
                   timeout(function(){ // Callback executes on separate thread. Async processor
                      if(!question) 
-                        defer.reject( { code : 'QBS-001' , Error : 'Question is not passed' } ); // invokes failure callback
+                        defer.reject({ code : 'QBS-001' , Error : 'Question is not passed' }); // invokes failure callback
                      if(!dataSourceToggle){
                         _questions.push(question);
                          defer.resolve(_questions); // invokes success callback
                      }else{
                         // TODO : have to write service call
                         console.log('service call');
+                        http.get('/questions')
+                         .then(function(questions){
+                              console.log(' Response from Provider :: '+ JSON.stringify(questions.data));
+                           },
+                           function(error){
+                              console.log('Error occurred while making backend call');
+                           }
+                         ); 
                      }
                   }, 5000); // Hold current processing thread for 2 secs
                   
                   return defer.promise; // Return promise to caller
                };      
 			};
-			var _getQuestions = function(){
-				if(!dataSourceToggle){
-					return _questions.slice();
-				}else{
-					//TODO : have to write service call
-					console.log('service call');
-				}
+			var _getQuestions = function(http){
+               return function(){
+                  if(!dataSourceToggle){
+                     return _questions.slice();
+                  }else{
+                     http.get('/questions')
+                         .then(function(questions){
+                              console.log(' Response from Provider :: '+ JSON.stringify(questions));
+                           },
+                           function(error){
+                              console.log('Error occurred while making backend call');
+                           }
+                         ); 
+                  }
+               };
    			};
    			var _removeByTitle = function(title){
    				if(!title) throw new Error ({ code : 'QBS-002' , Error : 'Title is not passed' });
@@ -83,10 +99,10 @@
    				}
    			};
 
-			this.$get = function($q,$timeout){
+			this.$get = function($q, $timeout, $http){
 				return{
-					addQuestion : _addQuestion($q,$timeout),
-					getQuestions : _getQuestions,
+					addQuestion : _addQuestion($q, $timeout, $http),
+					getQuestions : _getQuestions($http),
 					removeByTitle : _removeByTitle,
 					searchByTitle : _searchByTitle,
 					updateQuestionByTitle : _updateQuestionByTitle

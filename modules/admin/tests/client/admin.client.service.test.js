@@ -6,13 +6,30 @@
      var adminServiceProvider, question, question1;
 
        beforeEach(module(ApplicationConfiguration.applicationModuleName, function(AdminServiceProvider){
+         console.log('Service :: ###################' +AdminServiceProvider);
          adminServiceProvider = AdminServiceProvider;
          }));
        beforeEach(function(){
          question = { language:'C',title:'born ?',options:'[1972,2007,2012]',answer:'1972' };
          question1 = { language:'C++',title:'when ?',options:'[1972,2007,2012]',answer:'1972' };
        });
+        it('should use $http and return the questions when getQuestions function is invoked',function () {
+           adminServiceProvider.setDataSourceToggle(true);
+          var adminService = adminServiceProvider.$get();
+            var questions = adminService.getQuestions();
 
+           expect(adminService.getQuestions()).toEqual([
+                            {
+                              language: 'Javascript',
+                              title: 'Question 1',
+                              option1: 'A',
+                              option2: 'B',
+                              option3: 'B',
+                              answer: 'B'
+                            }
+                          ]);
+       });
+/*
         //add question
        it('should throw error when language is not passed as an argument to add function',inject(function($injector){
          adminServiceProvider.setDataSourceToggle(false);
@@ -70,7 +87,7 @@
           expect(adminService.searchByTitle()).toThrow(new Error({ code : 'QBS-003' , Error : 'Title is not passed' }));
        });
 
-
+*/     
  });
 })();
 

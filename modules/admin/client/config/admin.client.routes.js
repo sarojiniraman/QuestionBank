@@ -3,7 +3,7 @@
 	angular
 		.module('admin')
 		.config(function(AdminServiceProvider){
-			AdminServiceProvider.setDataSourceToggle(false);
+			AdminServiceProvider.setDataSourceToggle(true);
 		})
 		.config(function($stateProvider){
 			$stateProvider

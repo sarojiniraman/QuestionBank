@@ -174,7 +174,7 @@ module.exports = function(grunt) {
           },
           mock:{
             dir: defaultAssets.client.destination,
-              src: _.union(defaultAssets.client.lib.js,defaultAssets.client.lib.tests, defaultAssets.client.js, defaultAssets.client.lib.css, defaultAssets.client.css)  
+              src: _.union(defaultAssets.client.lib.js,defaultAssets.client.lib.tests, defaultAssets.client.js,defaultAssets.client.mocks, defaultAssets.client.lib.css, defaultAssets.client.css)  
           }
         },
         'node-inspector': {
