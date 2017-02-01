@@ -10,7 +10,7 @@
 				dataSourceToggle = value;
 			};
 			var _questions = [],
-				_addQuestion = function(q, timeout, http){
+				_addQuestion = function(q, timeout, http, state){
                return function(question){
                   var defer = q.defer();
 
@@ -24,16 +24,16 @@
                      }else{
                         // TODO : have to write service call
                         console.log('service call');
-                        http.get('/questions')
+                        http.post('/questions', question)
                          .then(function(questions){
-                              console.log(' Response from Provider :: '+ JSON.stringify(questions.data));
+                              state.go('admin.list');
                            },
                            function(error){
                               console.log('Error occurred while making backend call');
                            }
                          ); 
                      }
-                  }, 5000); // Hold current processing thread for 2 secs
+                  }, 500); // Hold current processing thread for 2 secs
                   
                   return defer.promise; // Return promise to caller
                };      
@@ -99,9 +99,9 @@
    				}
    			};
 
-			this.$get = function($q, $timeout, $http){
+			this.$get = function($q, $timeout, $http, $state){
 				return{
-					addQuestion : _addQuestion($q, $timeout, $http),
+					addQuestion : _addQuestion($q, $timeout, $http, $state),
 					getQuestions : _getQuestions($http),
 					removeByTitle : _removeByTitle,
 					searchByTitle : _searchByTitle,
