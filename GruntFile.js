@@ -44,7 +44,7 @@ module.exports = function(grunt) {
             },
             clientViews: {
                 files: defaultAssets.client.views,
-                tasks: ['index:build'],
+                tasks: ['index:mock'],
                 options: {
                     livereload: true
                 }

@@ -16,4 +16,26 @@ angular
      			console.log(JSON.stringify(error));
      		});
      	};
+
+
+    })
+
+
+    .controller('AdminListCtrl', function($scope,AdminService){
+     	AdminService.getQuestions(function(questions){
+     		$scope.questionsArray = questions;
+     	});
+
+
+     	$scope.delete = function(question){
+     		var promise = AdminService.removeByTitle(question);
+     		promise
+     			.then(function(question){
+     				console.log('Success callback invoked');
+     			},
+     			function(error){
+     				console.log('Error callback invoked');
+     			});
+
+     	};
     });

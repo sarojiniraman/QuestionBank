@@ -39,13 +39,14 @@
                };      
 			};
 			var _getQuestions = function(http){
-               return function(){
+               return function(cb){
                   if(!dataSourceToggle){
                      return _questions.slice();
                   }else{
                      http.get('/questions')
                          .then(function(questions){
-                              console.log(' Response from Provider :: '+ JSON.stringify(questions));
+                              console.log(' Response from Provider :: '+ JSON.stringify(questions.data));
+                              if(cb) cb(questions.data);
                            },
                            function(error){
                               console.log('Error occurred while making backend call');
@@ -54,19 +55,34 @@
                   }
                };
    			};
-   			var _removeByTitle = function(title){
-   				if(!title) throw new Error ({ code : 'QBS-002' , Error : 'Title is not passed' });
-   				if(!dataSourceToggle){
-   					_questions.forEach(function(question,index){
-   						if(title.indexOf(question.title) !== -1){
-   							_questions.splice(index,1);
-   							return true;
+   			var _removeByTitle = function(q, timeout, http, state){
+   				return function(question){
+   					var defer = q.defer();
+   					timeout(function(){
+   						if(!question.title) 
+   							defer.reject({ code : 'QBS-002' , Error : 'Title is not passed' });
+   						if(!dataSourceToggle){
+   							_questions.forEach(function(q,index){
+   							if(question.title.indexOf(q.title) !== -1){
+   								_questions.splice(index,1);
+   								defer.resolve(true);
+   							}
+   						});
+   						}else{
+	   						// TODO : have to write service call
+	   						console.log('service call');
+	   						console.log(question);
+	                        http.delete('/questions', question)
+	                         	.then(function(question){
+	                              state.go('admin.list');
+	                            },
+	                           function(error){
+	                              console.log('Error occurred while making backend call');
+	                            }
+	                         );
    						}
-   					});
-   				}else{
-   					// TODO : have to write service call
-   					console.log('service call');
-   				}
+   						}, 500);
+   					};
    				
    			};
    			var _searchByTitle = function(title){
@@ -103,7 +119,7 @@
 				return{
 					addQuestion : _addQuestion($q, $timeout, $http, $state),
 					getQuestions : _getQuestions($http),
-					removeByTitle : _removeByTitle,
+					removeByTitle : _removeByTitle($q, $timeout, $http, $state),
 					searchByTitle : _searchByTitle,
 					updateQuestionByTitle : _updateQuestionByTitle
 				};

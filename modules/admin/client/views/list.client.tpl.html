@@ -1,3 +1,30 @@
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="AdminListCtrl">
 	<h1>List of Questions :</h1>
+	<table class="table">
+		<thead>
+	  		<tr>
+	    		<th>Language</th>
+	    		<th>Title</th>
+	    		<th>OPtion1</th>
+	    		<th>OPtion2</th>
+	    		<th>OPtion3</th>
+	    		<th>OPtion4</th>
+	    		<th>Answer</th>
+	  		</tr>
+  		</thead>
+  		<tbody>
+			<tr ng-repeat="question in questionsArray">
+				<td>{{question.language}}</td>
+				<td>{{question.title}}</td>
+				<td>{{question.option1}}</td>
+				<td>{{question.option2}}</td>
+				<td>{{question.option3}}</td>
+				<td>{{question.option4}}</td>
+				<td>{{question.answer}}</td>
+				<td><a href="#">Edit</a></td>
+				<td><a href="#" ng-click="delete(question)">Delete</a></td>
+			</tr>
+		</tbody>
+	</table>
+
 </div>

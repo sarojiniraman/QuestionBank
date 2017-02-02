@@ -27,6 +27,7 @@
 					name:'admin.list',
 					url:'/list',
 					templateUrl:'modules/admin/client/views/list.client.tpl.html'
+					//controller:'AdminListCtrl'
 				});
 
 		});
